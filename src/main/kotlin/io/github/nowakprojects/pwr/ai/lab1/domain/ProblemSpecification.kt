@@ -5,6 +5,6 @@ class ProblemSpecification(
         val flowMatrix: IntMatrix,
         val distanceMatrix: IntMatrix
 ) {
-    constructor(factoriesCount: Int, flowMatrix: Array<IntArray>, distanceMatrix: Array<IntArray>)
+    constructor(factoriesCount: Int, flowMatrix: Array<Array<Int>>, distanceMatrix: Array<Array<Int>>)
             : this(factoriesCount, IntMatrix(flowMatrix), IntMatrix(distanceMatrix))
 }
