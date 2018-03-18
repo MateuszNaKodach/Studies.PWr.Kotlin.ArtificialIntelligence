@@ -1,13 +1,17 @@
 package io.github.nowakprojects.pwr.ai.lab1.domain
 
-abstract class PopulationCreator<T>(
-        private val genes: Int,
-        private val chromosomes: Int
+class PopulationCreator<GENE>(
+        private val possibleGenes: Array<GENE>,
+        private val chromosomesAmount: Int
 ) {
-
     fun createRandomPopulation() =
-            Population<T>((0..chromosomes).map { generateRandomValue() }.shuffled().toTypedArray())
-    
+            createWithChromosomes(
+                    (0..chromosomesAmount)
+                            .map { Chromosome<GENE>(possibleGenes.toList().shuffled()) }
+            )
 
-    abstract fun generateRandomValue(): T
+    fun createWithChromosomes(chromosomes: List<Chromosome<GENE>>) =
+            Population<GENE>(chromosomes)
+
+    fun createChromosome(genes: List<GENE>): Chromosome<GENE> = Chromosome<GENE>(genes)
 }
