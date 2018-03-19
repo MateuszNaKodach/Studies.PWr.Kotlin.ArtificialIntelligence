@@ -17,7 +17,7 @@ class FactoriesQapCrossover(
         (0..population.size)
                 .step(chromosomesToCrossover)
                 .forEach { it ->
-                    if (toCross()) {
+                    if (toCrossover()) {
                         crossoverChromosomes.addAll(crossover(population.get(it), population.get(it + 1)).toList())
                     } else {
                         crossoverChromosomes.addAll(listOf(population.get(it), population.get(it + 1)))
@@ -26,7 +26,7 @@ class FactoriesQapCrossover(
         return Population(crossoverChromosomes)
     }
 
-    fun toCross() = Random().nextDouble() > crossoverProbability
+    fun toCrossover() = Random().nextDouble() < crossoverProbability
 
     fun crossover(parent1: Chromosome<Int>, parent2: Chromosome<Int>): Pair<Chromosome<Int>, Chromosome<Int>> {
         val crossPoint = (parent1.size / 2)
