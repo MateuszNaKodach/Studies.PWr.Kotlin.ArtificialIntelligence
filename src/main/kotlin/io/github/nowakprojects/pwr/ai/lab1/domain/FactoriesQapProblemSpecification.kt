@@ -1,5 +1,7 @@
 package io.github.nowakprojects.pwr.ai.lab1.domain
 
+import io.github.nowakprojects.pwr.ai.lab1.infrastructure.IntMatrix
+
 class FactoriesQapProblemSpecification(
         val factoriesCount: Int,
         val flowMatrix: IntMatrix,

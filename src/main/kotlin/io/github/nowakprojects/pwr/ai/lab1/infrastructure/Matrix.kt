@@ -1,4 +1,4 @@
-package io.github.nowakprojects.pwr.ai.lab1.domain
+package io.github.nowakprojects.pwr.ai.lab1.infrastructure
 
 import java.lang.StringBuilder
 

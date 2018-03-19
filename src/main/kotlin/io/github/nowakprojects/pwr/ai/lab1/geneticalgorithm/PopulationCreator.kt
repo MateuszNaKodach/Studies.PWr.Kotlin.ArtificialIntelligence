@@ -1,4 +1,4 @@
-package io.github.nowakprojects.pwr.ai.lab1.domain
+package io.github.nowakprojects.pwr.ai.lab1.geneticalgorithm
 
 class PopulationCreator<GENE>(
         private val possibleGenes: Array<GENE>,

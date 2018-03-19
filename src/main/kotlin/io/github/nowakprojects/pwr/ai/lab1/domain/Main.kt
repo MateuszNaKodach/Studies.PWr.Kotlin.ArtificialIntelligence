@@ -1,5 +1,6 @@
 package io.github.nowakprojects.pwr.ai.lab1.domain
 
+import io.github.nowakprojects.pwr.ai.lab1.geneticalgorithm.PopulationCreator
 import io.github.nowakprojects.pwr.ai.lab1.infrastructure.ProblemSpecificationProvider
 import io.github.nowakprojects.pwr.ai.lab1.infrastructure.ResourcesFileProblemSpecificationProvider
 
