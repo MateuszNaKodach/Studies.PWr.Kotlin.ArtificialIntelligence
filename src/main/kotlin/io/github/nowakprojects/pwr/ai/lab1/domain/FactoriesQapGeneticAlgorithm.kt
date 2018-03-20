@@ -23,9 +23,21 @@ class FactoriesQapGeneticAlgorithm(
 ) {
 
     override fun computeFitness(chromosome: Chromosome<Int>): Double {
-        factoriesQapProblemSpecification.flowMatrix
+        var chromosomeFitness = 0.0
+        val factoriesAmount = factoriesQapProblemSpecification.factoriesAmount
+        val flowMatrix = factoriesQapProblemSpecification.flowMatrix
+        val distanceMatrix = factoriesQapProblemSpecification.distanceMatrix
+        val chromosomeGenes = chromosome.genes
+        (0 until factoriesAmount).forEach { firstFactory ->
+            (0 until factoriesAmount).forEach { secondFactory ->
+                val requiredFlow = flowMatrix.get(firstFactory, secondFactory)
+                val factoriesDistance = distanceMatrix.get(chromosomeGenes[firstFactory], chromosomeGenes[secondFactory])
+                chromosomeFitness+= (requiredFlow * factoriesDistance)
+            }
+        }
+        return chromosomeFitness
     }
 
-    override fun bestFitness(populationFitnessList: List<Double>) = populationFitnessList.min()
+    override fun bestFitness(populationFitnessList: List<Double>) = populationFitnessList.min()!!
 
 }
