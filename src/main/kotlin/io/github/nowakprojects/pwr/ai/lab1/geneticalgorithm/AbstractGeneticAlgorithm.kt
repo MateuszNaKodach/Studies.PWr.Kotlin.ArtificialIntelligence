@@ -1,5 +1,7 @@
 package io.github.nowakprojects.pwr.ai.lab1.geneticalgorithm
 
+import io.github.nowakprojects.pwr.ai.lab1.domain.GeneticAlgorithmBestSolution
+
 abstract class AbstractGeneticAlgorithm<GENE>(
         val epochLimit: Int,
         val populationSize: Int,
@@ -12,11 +14,14 @@ abstract class AbstractGeneticAlgorithm<GENE>(
         val knownBestFitness: Double? = null
 ) {
 
-    fun execute(): ChromosomeWithFitness<GENE> {
+    fun execute(): GeneticAlgorithmBestSolution<GENE,Double> {
+        val algorithmStart = System.currentTimeMillis()
         val bestChromosomes = mutableListOf<ChromosomeWithFitness<GENE>>()
         var population = populationCreator.createRandomPopulation()
+        var pastEpochs = 0
         for (epoch in (1..epochLimit)) {
             if (bestChromosomes.map { it.fitness }.contains(knownBestFitness)) {
+                pastEpochs = epoch - 1
                 break
             }
             val populationFitnessList = computeFitnessForPopulation(population)
@@ -34,7 +39,9 @@ abstract class AbstractGeneticAlgorithm<GENE>(
             bestChromosomes.add(ChromosomeWithFitness(bestChromosome, bestFitness))
             population = mutatedPopulation
         }
-        return bestChromosomes.minBy { it.fitness }!!
+        val bestSolution = bestChromosomes.minBy { it.fitness }!!
+        val algorithmEnd = System.currentTimeMillis()
+        return GeneticAlgorithmBestSolution(bestSolution.chromosome, bestSolution.fitness, pastEpochs, algorithmEnd-algorithmStart, bestChromosomes)
     }
 
     private fun computeFitnessForPopulation(population: Population<GENE>) =
