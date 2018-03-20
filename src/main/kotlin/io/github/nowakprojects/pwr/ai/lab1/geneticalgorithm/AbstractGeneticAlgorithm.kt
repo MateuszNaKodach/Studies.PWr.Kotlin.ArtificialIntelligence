@@ -12,8 +12,8 @@ abstract class AbstractGeneticAlgorithm<GENE>(
 ) {
 
     fun execute() {
+        var population = populationCreator.createRandomPopulation()
         for (epoch in (0..epochLimit)) {
-            val population = populationCreator.createRandomPopulation()
             val populationFitnessList = computeFitnessForPopulation(population)
             val normalizedFitnessList = normaliseFitnessList(populationFitnessList)
             val chromosomeWithNormalizedFitnessList =
@@ -25,7 +25,8 @@ abstract class AbstractGeneticAlgorithm<GENE>(
             val bestFitness = bestFitness(populationFitnessList)
             val bestChromosomeIndex = populationFitnessList.indexOf(bestFitness)
             val bestChromosome = population.get(bestChromosomeIndex)
-            println(bestChromosome)
+            println("Epoch: $epoch, Population fitness average: ${populationFitnessList.average()}, Best fitness: $bestFitness, Best chromosome: $bestChromosome")
+            population = mutatedPopulation
         }
     }
 
