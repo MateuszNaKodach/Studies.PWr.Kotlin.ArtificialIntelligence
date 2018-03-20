@@ -8,13 +8,17 @@ import java.time.Instant
 //TODO: Exclude to GeneticAlgorithmCreator or something like that
 val POPULATION_SIZE = 1000
 val CROSSOVER_PROBABILITY = 0.8
-val MUTATION_PROBABILITY = 0.8
+val MUTATION_PROBABILITY = 0.008
 val EPOCH_LIMIT = 10000
 
 fun main(args: Array<String>) {
-    val problemSpecificationProvider: ProblemSpecificationProvider = ResourcesFileProblemSpecificationProvider("/lab1/had12.dat")
+  /*  val resourcePath = "/lab1/had12.dat"
+    val knownBestFitness = 1652.0*/
+    val resourcePath = "/lab1/had18.dat"
+    val knownBestFitness = 5358.0
+    val problemSpecificationProvider: ProblemSpecificationProvider = ResourcesFileProblemSpecificationProvider(resourcePath)
     val problemSpecification = problemSpecificationProvider.provide()
-    val factoriesQapGeneticAlgorithm = FactoriesQapGeneticAlgorithm(problemSpecification, EPOCH_LIMIT, POPULATION_SIZE, CROSSOVER_PROBABILITY, MUTATION_PROBABILITY, knownBestFitness = 1652.0)
+    val factoriesQapGeneticAlgorithm = FactoriesQapGeneticAlgorithm(problemSpecification, EPOCH_LIMIT, POPULATION_SIZE, CROSSOVER_PROBABILITY, MUTATION_PROBABILITY, knownBestFitness)
     val (chromosome, fitness, epochs, executionTimeMillis) = factoriesQapGeneticAlgorithm.execute()
     println("After $epochs epochs (limit was: $EPOCH_LIMIT), with population size: $POPULATION_SIZE")
     println("And probabilities: CROSSOVER: $CROSSOVER_PROBABILITY, MUTATION: $MUTATION_PROBABILITY")
