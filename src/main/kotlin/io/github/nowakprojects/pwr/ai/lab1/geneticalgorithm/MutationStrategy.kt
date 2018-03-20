@@ -2,9 +2,7 @@ package io.github.nowakprojects.pwr.ai.lab1.geneticalgorithm
 
 import java.util.*
 
-abstract class MutationStrategy<GENE>(
-        val mutationProbability: Double
-) {
+abstract class MutationStrategy<GENE>(private val mutationProbability: Double) {
 
     fun mutatePopulation(population: Population<GENE>): Population<GENE> =
             Population(
@@ -13,7 +11,7 @@ abstract class MutationStrategy<GENE>(
             )
 
 
-    abstract fun mutate(chromosome: Chromosome<GENE>): Chromosome<GENE>
+    protected abstract fun mutate(chromosome: Chromosome<GENE>): Chromosome<GENE>
 
     private fun toMutate(): Boolean = Random().nextDouble() < mutationProbability
 }
