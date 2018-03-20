@@ -15,7 +15,7 @@ class FactoriesQapGeneticAlgorithm(
         crossoverProbability,
         mutationProbability,
         PopulationCreator(factoriesQapProblemSpecification.getPossibleFactories(), populationSize),
-        TournamentSelection<Int>(elitism = false, selectionGoal = SelectionStrategy.SelectionGoal.MINIMIZE_FITNESS),
+        TournamentSelection<Int>(elitism = true, selectionGoal = SelectionStrategy.SelectionGoal.MINIMIZE_FITNESS),
         FactoriesQapCrossover(factoriesQapProblemSpecification.getPossibleFactories(), crossoverProbability),
         FactoriesQapMutation(mutationProbability),
         knownBestFitness
