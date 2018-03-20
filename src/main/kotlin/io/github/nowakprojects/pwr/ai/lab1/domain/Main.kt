@@ -7,7 +7,7 @@ import io.github.nowakprojects.pwr.ai.lab1.infrastructure.ResourcesFileProblemSp
 //TODO: Exclude to GeneticAlgorithmCreator or something like that
 val POPULATION_SIZE = 1000
 val CROSSOVER_PROBABILITY = 0.8
-val MUTATION_PROBABILITY = 0.008
+val MUTATION_PROBABILITY = 0.8
 val EPOCH_LIMIT = 10000
 
 fun main(args: Array<String>) {

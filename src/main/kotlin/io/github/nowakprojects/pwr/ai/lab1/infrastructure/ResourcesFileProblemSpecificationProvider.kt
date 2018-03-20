@@ -16,8 +16,8 @@ class ResourcesFileProblemSpecificationProvider(
         }
         val scanner = Scanner(javaClass.getResourceAsStream(resourcePath))
         val factoriesAmount = scanner.nextInt()
-        val distanceMatrix = loadDistanceMatrix(factoriesAmount, scanner)
         val flowMatrix = loadFlowMatrix(factoriesAmount, scanner)
+        val distanceMatrix = loadDistanceMatrix(factoriesAmount, scanner)
         return FactoriesQapProblemSpecification(
                 factoriesAmount,
                 flowMatrix.map { it.toTypedArray() }.toTypedArray(),
