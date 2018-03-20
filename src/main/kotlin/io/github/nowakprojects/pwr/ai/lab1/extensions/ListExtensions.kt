@@ -8,5 +8,5 @@ fun <E> List<E>.takeRandom(n: Int = 1, random: java.util.Random = Random()): Lis
         if (this.isEmpty()) {
             emptyList()
         } else {
-            (0..n).map { this.random()!! }
+            (0 until n).map { this.random()!! }
         }

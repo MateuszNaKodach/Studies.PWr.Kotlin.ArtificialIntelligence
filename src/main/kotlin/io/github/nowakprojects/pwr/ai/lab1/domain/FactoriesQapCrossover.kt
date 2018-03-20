@@ -1,5 +1,6 @@
 package io.github.nowakprojects.pwr.ai.lab1.domain
 
+import io.github.nowakprojects.pwr.ai.lab1.extensions.nextInt
 import io.github.nowakprojects.pwr.ai.lab1.extensions.random
 import io.github.nowakprojects.pwr.ai.lab1.geneticalgorithm.Chromosome
 import io.github.nowakprojects.pwr.ai.lab1.geneticalgorithm.CrossoverStrategy
@@ -11,18 +12,21 @@ class FactoriesQapCrossover(
         crossoverProbability: Double
 ) : CrossoverStrategy<Int>(crossoverProbability) {
 
+    //TODO: Fix crossover to takes only once every chromosome
     override fun crossoverPopulation(population: Population<Int>): Population<Int> {
+        val random = Random()
+        val chromosomesToCrossover = population.chromosomes.toMutableList()
         val crossoverChromosomes = mutableListOf<Chromosome<Int>>()
-        val chromosomesToCrossover = 2
-        (0..population.size)
-                .step(chromosomesToCrossover)
-                .forEach { it ->
-                    if (toCrossover()) {
-                        crossoverChromosomes.addAll(crossover(population.get(it), population.get(it + 1)).toList())
-                    } else {
-                        crossoverChromosomes.addAll(listOf(population.get(it), population.get(it + 1)))
-                    }
-                }
+        val crossChromosomesCount = 2
+
+        while(chromosomesToCrossover.size >= crossChromosomesCount){
+            val crossoverCandidates = Pair(chromosomesToCrossover.removeAt(random.nextInt(1,chromosomesToCrossover.size,0)), chromosomesToCrossover.removeAt(0))
+            if (toCrossover()) {
+                crossoverChromosomes.addAll(crossover(crossoverCandidates.first, crossoverCandidates.second).toList())
+            } else {
+                crossoverChromosomes.addAll(crossoverCandidates.toList())
+            }
+        }
         return Population(crossoverChromosomes)
     }
 
@@ -37,7 +41,7 @@ class FactoriesQapCrossover(
 
     private fun replaceDuplicatesInChromosome(chromosome: Chromosome<Int>): Chromosome<Int> {
         val newGenesList = chromosome.genes.toMutableList()
-        var duplicateIndex = findFirstDuplicateIndex(chromosome.genes)
+        var duplicateIndex = findFirstDuplicateIndex(newGenesList)
         while (duplicateIndex != null) {
             val newGene = possibleGenes.filter { !newGenesList.contains(it) }.random()
             newGenesList[duplicateIndex] = newGene!!
@@ -47,9 +51,9 @@ class FactoriesQapCrossover(
     }
 
     private fun findFirstDuplicateIndex(genes: List<Int>): Int? {
-        (0..genes.size).forEach {
+        (0 until genes.size).forEach {
             val gene = genes[it]
-            if (genes.filterIndexed { index, _ -> index != gene }.contains(gene)) {
+            if (genes.filterIndexed { index, _ -> index != it }.contains(gene)) {
                 return it
             }
         }

@@ -6,7 +6,7 @@ import java.util.Objects.isNull
 
 
 class ResourcesFileProblemSpecificationProvider(
-        private val resourcePath: String = "/lab1/had12.dat"
+        private val resourcePath: String
 ) : ProblemSpecificationProvider {
 
     override fun provide(): FactoriesQapProblemSpecification {
@@ -14,10 +14,10 @@ class ResourcesFileProblemSpecificationProvider(
         if (isNull(resourceAsStream)) {
             throw ProblemSpecificationNotFound("Resource file $resourcePath not exists!");
         }
-        val scanner = Scanner(javaClass.getResourceAsStream("/lab1/had12.dat"))
+        val scanner = Scanner(javaClass.getResourceAsStream(resourcePath))
         val factoriesAmount = scanner.nextInt()
-        val flowMatrix = loadFlowMatrix(factoriesAmount, scanner)
         val distanceMatrix = loadDistanceMatrix(factoriesAmount, scanner)
+        val flowMatrix = loadFlowMatrix(factoriesAmount, scanner)
         return FactoriesQapProblemSpecification(
                 factoriesAmount,
                 flowMatrix.map { it.toTypedArray() }.toTypedArray(),

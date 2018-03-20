@@ -1,25 +1,24 @@
 package io.github.nowakprojects.pwr.ai.lab1.domain
 
-import io.github.nowakprojects.pwr.ai.lab1.geneticalgorithm.AbstractGeneticAlgorithm
-import io.github.nowakprojects.pwr.ai.lab1.geneticalgorithm.Chromosome
-import io.github.nowakprojects.pwr.ai.lab1.geneticalgorithm.PopulationCreator
-import io.github.nowakprojects.pwr.ai.lab1.geneticalgorithm.TournamentSelection
+import io.github.nowakprojects.pwr.ai.lab1.geneticalgorithm.*
 
 class FactoriesQapGeneticAlgorithm(
         private val factoriesQapProblemSpecification: FactoriesQapProblemSpecification,
         epochLimit: Int,
         populationSize: Int,
         crossoverProbability: Double,
-        mutationProbability: Double
+        mutationProbability: Double,
+        knownBestFitness:Double?
 ) : AbstractGeneticAlgorithm<Int>(
         epochLimit,
         populationSize,
         crossoverProbability,
         mutationProbability,
         PopulationCreator(factoriesQapProblemSpecification.getPossibleFactories(), populationSize),
-        TournamentSelection<Int>(),
+        TournamentSelection<Int>(elitism = false, selectionGoal = SelectionStrategy.SelectionGoal.MINIMIZE_FITNESS),
         FactoriesQapCrossover(factoriesQapProblemSpecification.getPossibleFactories(), crossoverProbability),
-        FactoriesQapMutation(mutationProbability)
+        FactoriesQapMutation(mutationProbability),
+        knownBestFitness
 ) {
 
     override fun computeFitness(chromosome: Chromosome<Int>): Double {
@@ -31,7 +30,7 @@ class FactoriesQapGeneticAlgorithm(
         (0 until factoriesAmount).forEach { firstFactory ->
             (0 until factoriesAmount).forEach { secondFactory ->
                 val requiredFlow = flowMatrix.get(firstFactory, secondFactory)
-                val factoriesDistance = distanceMatrix.get(chromosomeGenes[firstFactory], chromosomeGenes[secondFactory])
+                val factoriesDistance = distanceMatrix.get(chromosomeGenes[firstFactory]-1, chromosomeGenes[secondFactory]-1)
                 chromosomeFitness+= (requiredFlow * factoriesDistance)
             }
         }

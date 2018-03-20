@@ -10,5 +10,5 @@ class FactoriesQapProblemSpecification(
     constructor(factoriesCount: Int, flowMatrix: Array<Array<Int>>, distanceMatrix: Array<Array<Int>>)
             : this(factoriesCount, IntMatrix(flowMatrix), IntMatrix(distanceMatrix))
 
-    fun getPossibleFactories() = (0..factoriesAmount).map { it }.toTypedArray()
+    fun getPossibleFactories() = (1..factoriesAmount).map { it }.toTypedArray()
 }

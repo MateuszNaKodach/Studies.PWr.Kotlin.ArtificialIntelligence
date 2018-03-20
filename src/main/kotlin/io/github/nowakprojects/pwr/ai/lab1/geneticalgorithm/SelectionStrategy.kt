@@ -29,7 +29,7 @@ abstract class SelectionStrategy<GENE>(
                 newPopulationSize -= 1
             }
 
-            (0..newPopulationSize)
+            (1..newPopulationSize)
                     .forEach { newPopulationChromosomes.add(selectChromosomeForNewPopulation(chromosomeWithFitnessList)) }
             return Population(newPopulationChromosomes)
         }

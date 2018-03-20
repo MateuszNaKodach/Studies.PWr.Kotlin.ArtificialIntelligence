@@ -6,7 +6,7 @@ class PopulationCreator<GENE>(
 ) {
     fun createRandomPopulation() =
             createWithChromosomes(
-                    (0..chromosomesAmount)
+                    (1..chromosomesAmount)
                             .map { Chromosome<GENE>(possibleGenes.toList().shuffled()) }
             )
 
