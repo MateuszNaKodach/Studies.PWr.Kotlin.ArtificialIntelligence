@@ -1,7 +1,7 @@
 package io.github.nowakprojects.pwr.ai.lab1.geneticalgorithm
 
 abstract class SelectionStrategy<GENE>(
-        private val selectionGoal: SelectionGoal,
+        private val selectionGoal: SelectionGoal = SelectionGoal.MINIMIZE_FITNESS,
         protected val elitism: Boolean = true
 ) {
     fun selectNewPopulation(chromosomeWithFitnessList: List<ChromosomeWithFitness<GENE>>): Population<GENE> {

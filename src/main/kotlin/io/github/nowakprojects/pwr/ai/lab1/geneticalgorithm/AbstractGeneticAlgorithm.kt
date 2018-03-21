@@ -25,10 +25,10 @@ abstract class AbstractGeneticAlgorithm<GENE>(
                 break
             }
             val populationFitnessList = computeFitnessForPopulation(population)
-            val normalizedFitnessList = normaliseFitnessList(populationFitnessList)
-            val chromosomeWithNormalizedFitnessList =
+            val normalizedFitnessList = normaliseFitnessForSelection(populationFitnessList)
+            val chromosomeWithNormalizedFitnessForSelectionList =
                     (0 until population.size).map { ChromosomeWithFitness<GENE>(population.chromosomes[it], normalizedFitnessList[it]) }
-            val selectedPopulation = selectionStrategy.selectNewPopulation(chromosomeWithNormalizedFitnessList)
+            val selectedPopulation = selectionStrategy.selectNewPopulation(chromosomeWithNormalizedFitnessForSelectionList)
             val crossedPopulation = crossoverStrategy.crossoverPopulation(selectedPopulation)
             val mutatedPopulation = mutationStrategy.mutatePopulation(crossedPopulation)
 
@@ -47,7 +47,7 @@ abstract class AbstractGeneticAlgorithm<GENE>(
     private fun computeFitnessForPopulation(population: Population<GENE>) =
             population.chromosomes.map { computeFitness(it) }
 
-    private fun normaliseFitnessList(fitnessList: List<Double>): List<Double> {
+    private fun normaliseFitnessForSelection(fitnessList: List<Double>): List<Double> {
         val fitnessListSum = fitnessList.sum()
         return fitnessList
                 .map { it / fitnessListSum }

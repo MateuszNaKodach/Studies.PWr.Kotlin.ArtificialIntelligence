@@ -8,6 +8,7 @@ class FactoriesQapGeneticAlgorithm(
         populationSize: Int,
         crossoverProbability: Double,
         mutationProbability: Double,
+        selectionStrategy: SelectionStrategy<Int>,
         knownBestFitness:Double?
 ) : AbstractGeneticAlgorithm<Int>(
         epochLimit,
@@ -15,7 +16,7 @@ class FactoriesQapGeneticAlgorithm(
         crossoverProbability,
         mutationProbability,
         PopulationCreator(factoriesQapProblemSpecification.getPossibleFactories(), populationSize),
-        TournamentSelection<Int>(elitism = true, selectionGoal = SelectionStrategy.SelectionGoal.MINIMIZE_FITNESS),
+        selectionStrategy,
         FactoriesQapCrossover(factoriesQapProblemSpecification.getPossibleFactories(), crossoverProbability),
         FactoriesQapMutation(mutationProbability),
         knownBestFitness
