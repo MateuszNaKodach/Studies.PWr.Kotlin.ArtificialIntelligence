@@ -4,8 +4,11 @@ abstract class SelectionStrategy<GENE>(
         private val selectionGoal: SelectionGoal = SelectionGoal.MINIMIZE_FITNESS,
         protected val elitism: Boolean = true
 ) {
-    fun selectNewPopulation(chromosomeWithFitnessList: List<ChromosomeWithFitness<GENE>>): Population<GENE> {
-        return PopulationSelector(chromosomeWithFitnessList).makeSelection()
+    fun selectNewPopulation(population: Population<GENE>, populationFitnessList: List<Double>): Population<GENE> {
+        val normalizedFitnessList = normaliseFitnessForSelection(populationFitnessList)
+        val chromosomeWithNormalizedFitnessForSelectionList =
+                (0 until population.size).map { ChromosomeWithFitness<GENE>(population.chromosomes[it], normalizedFitnessList[it]) }
+        return PopulationSelector(chromosomeWithNormalizedFitnessForSelectionList).makeSelection()
     }
 
     protected abstract fun selectChromosomeForNewPopulation(chromosomeWithFitnessList: List<ChromosomeWithFitness<GENE>>): Chromosome<GENE>
@@ -14,6 +17,12 @@ abstract class SelectionStrategy<GENE>(
     fun findBestChromosomeOf(chromosomeWithFitnessList: List<ChromosomeWithFitness<GENE>>): Chromosome<GENE> = when (selectionGoal) {
         SelectionGoal.MINIMIZE_FITNESS -> chromosomeWithFitnessList.minBy { it.fitness }!!.chromosome
         SelectionGoal.MAXIMIZE_FITNESS -> chromosomeWithFitnessList.maxBy { it.fitness }!!.chromosome
+    }
+
+    private fun normaliseFitnessForSelection(fitnessList: List<Double>): List<Double> {
+        val fitnessListSum = fitnessList.sum()
+        return fitnessList
+                .map { it / fitnessListSum }
     }
 
 
