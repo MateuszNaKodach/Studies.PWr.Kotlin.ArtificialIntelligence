@@ -9,10 +9,10 @@ import io.github.nowakprojects.pwr.ai.lab1.infrastructure.ResourcesFileProblemSp
 import java.time.Instant
 
 //TODO: Exclude to GeneticAlgorithmCreator or something like that
-val POPULATION_SIZE = 1000
+val POPULATION_SIZE = 10000
 val CROSSOVER_PROBABILITY = 0.8
 val MUTATION_PROBABILITY = 0.8
-val EPOCH_LIMIT = 10000
+val EPOCH_LIMIT = 100
 
 fun main(args: Array<String>) {
     val resourcePath = "/lab1/had12.dat"

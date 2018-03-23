@@ -14,7 +14,9 @@ abstract class AbstractGeneticAlgorithm<GENE>(
         val knownBestFitness: Double? = null
 ) {
 
-    fun execute(): GeneticAlgorithmBestSolution<GENE,Double> {
+    val fitnessCache = HashMap<Chromosome<GENE>, Double>()
+
+    fun execute(): GeneticAlgorithmBestSolution<GENE, Double> {
         val algorithmStart = System.currentTimeMillis()
         val bestChromosomes = mutableListOf<ChromosomeWithFitness<GENE>>()
         var population = populationCreator.createRandomPopulation()
@@ -41,17 +43,21 @@ abstract class AbstractGeneticAlgorithm<GENE>(
         }
         val bestSolution = bestChromosomes.minBy { it.fitness }!!
         val algorithmEnd = System.currentTimeMillis()
-        return GeneticAlgorithmBestSolution(bestSolution.chromosome, bestSolution.fitness, pastEpochs, algorithmEnd-algorithmStart, bestChromosomes)
+        return GeneticAlgorithmBestSolution(bestSolution.chromosome, bestSolution.fitness, pastEpochs, algorithmEnd - algorithmStart, bestChromosomes)
     }
 
     private fun computeFitnessForPopulation(population: Population<GENE>) =
-            population.chromosomes.map { computeFitness(it) }
+            population.chromosomes.map { getFitnessForChromosome(it) }
 
     private fun normaliseFitnessForSelection(fitnessList: List<Double>): List<Double> {
         val fitnessListSum = fitnessList.sum()
         return fitnessList
                 .map { it / fitnessListSum }
     }
+
+    private fun getFitnessForChromosome(chromosome: Chromosome<GENE>): Double =
+        fitnessCache.getOrPut(chromosome, { computeFitness(chromosome) })
+
 
     //TODO: Dzielenie cos z maksymalizacja/ minimalizacja
     abstract fun computeFitness(chromosome: Chromosome<GENE>): Double
