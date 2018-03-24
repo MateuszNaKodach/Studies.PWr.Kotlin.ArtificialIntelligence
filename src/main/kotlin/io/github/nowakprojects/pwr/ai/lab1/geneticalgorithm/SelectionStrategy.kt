@@ -2,7 +2,7 @@ package io.github.nowakprojects.pwr.ai.lab1.geneticalgorithm
 
 abstract class SelectionStrategy<GENE>(
         private val selectionGoal: SelectionGoal = SelectionGoal.MINIMIZE_FITNESS,
-        protected val elitism: Boolean = true
+        protected val elitism: Boolean = false
 ) {
     fun selectNewPopulation(population: Population<GENE>, populationFitnessList: List<Double>): Population<GENE> {
         val normalizedFitnessList = normaliseFitnessForSelection(populationFitnessList)

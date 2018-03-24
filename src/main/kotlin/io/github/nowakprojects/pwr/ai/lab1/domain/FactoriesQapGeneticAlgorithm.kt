@@ -9,7 +9,7 @@ class FactoriesQapGeneticAlgorithm(
         crossoverProbability: Double,
         mutationProbability: Double,
         selectionStrategy: SelectionStrategy<Int>,
-        knownBestFitness: Double?
+        knownBestFitness: Double? = null
 ) : AbstractGeneticAlgorithm<Int>(
         false,
         GeneticAlgorithmSettings(epochLimit, populationSize, crossoverProbability, mutationProbability),
