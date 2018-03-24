@@ -22,20 +22,20 @@ abstract class AbstractGeneticAlgorithm<GENE>(
         var pastEpochs = 0
         for (epoch in (1..epochLimit)) {
             val populationFitnessList = computeFitnessForPopulation(currentPopulation)
+            val populationStats = createPopulationStats(currentPopulation.copy(), populationFitnessList)
+            fullPopulationStatsList.add(populationStats)
+            println("Epoch: $epoch\n$populationStats")
+
             val selectedPopulation = selectionStrategy.selectNewPopulation(currentPopulation, populationFitnessList)
             val crossedPopulation = crossoverStrategy.crossoverPopulation(selectedPopulation)
             val mutatedPopulation = mutationStrategy.mutatePopulation(crossedPopulation)
 
-            val populationStats = createPopulationStats(currentPopulation, populationFitnessList)
-
-            println("Epoch: $epoch\n$populationStats")
-            fullPopulationStatsList.add(populationStats)
 
             pastEpochs = epoch
             if (isSolutionKnown() && populationStats.bestFitness == knownBestFitness) {
                 break
             }
-            currentPopulation = mutatedPopulation
+            currentPopulation = mutatedPopulation.copy(chromosomes = mutatedPopulation.chromosomes.toMutableList().apply { set(0,populationStats.bestChromosome) })
         }
         val executionTimeMillis = System.currentTimeMillis() - algorithmStart
         return GeneticAlgorithmSolution(

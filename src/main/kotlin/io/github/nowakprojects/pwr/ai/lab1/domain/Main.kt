@@ -7,13 +7,14 @@ import io.github.nowakprojects.pwr.ai.lab1.infrastructure.ProblemSpecificationPr
 import io.github.nowakprojects.pwr.ai.lab1.infrastructure.ResourcesFileProblemSpecificationProvider
 
 //TODO: Exclude to GeneticAlgorithmCreator or something like that
-const val POPULATION_SIZE = 100
-const val CROSSOVER_PROBABILITY = 0.7
-const val MUTATION_PROBABILITY = 0.01
+const val POPULATION_SIZE = 10000
+const val CROSSOVER_PROBABILITY = 0.8
+const val MUTATION_PROBABILITY = 0.08
 const val EPOCH_LIMIT = 100
 
 fun main(args: Array<String>) {
     val resourcePath = "/lab1/had12.dat"
+   // val knownBestFitness = 1652.0
     val problemSpecificationProvider: ProblemSpecificationProvider = ResourcesFileProblemSpecificationProvider(resourcePath)
     val problemSpecification = problemSpecificationProvider.provide()
     val factoriesQapGeneticAlgorithm = FactoriesQapGeneticAlgorithm(
