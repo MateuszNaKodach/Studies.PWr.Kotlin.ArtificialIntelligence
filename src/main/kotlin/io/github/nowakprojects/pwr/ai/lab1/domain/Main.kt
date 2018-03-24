@@ -1,24 +1,21 @@
 package io.github.nowakprojects.pwr.ai.lab1.domain
 
-import io.github.nowakprojects.pwr.ai.lab1.geneticalgorithm.PopulationCreator
-import io.github.nowakprojects.pwr.ai.lab1.geneticalgorithm.RouletteSelection
 import io.github.nowakprojects.pwr.ai.lab1.geneticalgorithm.SelectionStrategy
 import io.github.nowakprojects.pwr.ai.lab1.geneticalgorithm.TournamentSelection
 import io.github.nowakprojects.pwr.ai.lab1.infrastructure.ProblemSpecificationProvider
 import io.github.nowakprojects.pwr.ai.lab1.infrastructure.ResourcesFileProblemSpecificationProvider
-import java.time.Instant
 
 //TODO: Exclude to GeneticAlgorithmCreator or something like that
-val POPULATION_SIZE = 10000
-val CROSSOVER_PROBABILITY = 0.8
-val MUTATION_PROBABILITY = 0.8
-val EPOCH_LIMIT = 100
+const val POPULATION_SIZE = 10000
+const val CROSSOVER_PROBABILITY = 0.8
+const val MUTATION_PROBABILITY = 0.8
+const val EPOCH_LIMIT = 100
 
 fun main(args: Array<String>) {
-    val resourcePath = "/lab1/had12.dat"
-    val knownBestFitness = 1652.0
-    /*val resourcePath = "/lab1/had18.dat"
-    val knownBestFitness = 5358.0*/
+    /*val resourcePath = "/lab1/had12.dat"
+    val knownBestFitness = 1652.0*/
+    val resourcePath = "/lab1/had18.dat"
+    val knownBestFitness = 5358.0
     val problemSpecificationProvider: ProblemSpecificationProvider = ResourcesFileProblemSpecificationProvider(resourcePath)
     val problemSpecification = problemSpecificationProvider.provide()
     val factoriesQapGeneticAlgorithm = FactoriesQapGeneticAlgorithm(
@@ -29,10 +26,10 @@ fun main(args: Array<String>) {
             MUTATION_PROBABILITY,
             TournamentSelection<Int>(elitism = true, selectionGoal = SelectionStrategy.SelectionGoal.MINIMIZE_FITNESS),
             knownBestFitness)
-    val (chromosome, fitness, epochs, executionTimeMillis) = factoriesQapGeneticAlgorithm.execute()
-    println("After $epochs epochs (limit was: $EPOCH_LIMIT), with population size: $POPULATION_SIZE")
-    println("And probabilities: CROSSOVER: $CROSSOVER_PROBABILITY, MUTATION: $MUTATION_PROBABILITY")
-    println("Best algorithm fitness is : $fitness")
-    println("For chromosome: $chromosome")
-    println("Algorithm execution takes: $executionTimeMillis ms")
+    val (bestSolution, fullPopulationStatsList, passedEpochs, executionTimeMillis, selectionStrategyName, settings)
+            = factoriesQapGeneticAlgorithm.execute()
+    println("ALGORITHM HAS FINISH! Execution takes: $executionTimeMillis ms")
+    println("After $passedEpochs epochs (limit was: ${settings.epochLimit}), with population size: ${settings.populationSize}")
+    println("And probabilities - CROSSOVER: ${settings.crossoverProbability} - MUTATION: ${settings.mutationProbability}")
+    println("Best solution is : fitness = ${bestSolution.fitness} for chromosome = ${bestSolution.chromosome}")
 }

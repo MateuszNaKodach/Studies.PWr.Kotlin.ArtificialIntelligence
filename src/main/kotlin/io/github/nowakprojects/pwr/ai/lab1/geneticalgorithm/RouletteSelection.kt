@@ -4,14 +4,14 @@ import io.github.nowakprojects.pwr.ai.lab1.extensions.takeRandom
 import java.util.*
 
 class RouletteSelection<GENE>(
-        selectionGoal: SelectionGoal,
+        selectionGoal: SelectionGoal = SelectionGoal.MAXIMIZE_FITNESS,
         elitism: Boolean = true)
-    : SelectionStrategy<GENE>(selectionGoal = SelectionGoal.MAXIMIZE_FITNESS, elitism = elitism) {
+    : SelectionStrategy<GENE>(selectionGoal, elitism) {
 
-    override fun selectChromosomeForNewPopulation(chromosomeWithFitnessList: List<ChromosomeWithFitness<GENE>>): Chromosome<GENE> {
+    override fun selectChromosomeForNewPopulation(chromosomeWithNormalizedFitnessList: List<ChromosomeWithFitness<GENE>>): Chromosome<GENE> {
         val randomFitness = Random().nextDouble()
         var cumSum: Double = 0.0
-        return chromosomeWithFitnessList
+        return chromosomeWithNormalizedFitnessList
                 .takeWhile { cumSum < randomFitness }
                 .onEach { cumSum += it.fitness }
                 .last()

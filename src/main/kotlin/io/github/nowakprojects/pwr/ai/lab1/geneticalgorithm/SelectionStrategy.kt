@@ -11,7 +11,7 @@ abstract class SelectionStrategy<GENE>(
         return PopulationSelector(chromosomeWithNormalizedFitnessForSelectionList).makeSelection()
     }
 
-    protected abstract fun selectChromosomeForNewPopulation(chromosomeWithFitnessList: List<ChromosomeWithFitness<GENE>>): Chromosome<GENE>
+    protected abstract fun selectChromosomeForNewPopulation(chromosomeWithNormalizedFitnessList: List<ChromosomeWithFitness<GENE>>): Chromosome<GENE>
 
     //FIXME: Write it better, pass FitnessComparator, which takes two chromosomes
     fun findBestChromosomeOf(chromosomeWithFitnessList: List<ChromosomeWithFitness<GENE>>): Chromosome<GENE> = when (selectionGoal) {

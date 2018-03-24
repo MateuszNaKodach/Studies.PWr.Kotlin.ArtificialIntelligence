@@ -12,10 +12,7 @@ class FactoriesQapGeneticAlgorithm(
         knownBestFitness: Double?
 ) : AbstractGeneticAlgorithm<Int>(
         false,
-        epochLimit,
-        populationSize,
-        crossoverProbability,
-        mutationProbability,
+        GeneticAlgorithmSettings(epochLimit, populationSize, crossoverProbability, mutationProbability),
         PopulationCreator(factoriesQapProblemSpecification.getPossibleFactories(), populationSize),
         selectionStrategy,
         FactoriesQapCrossover(factoriesQapProblemSpecification.getPossibleFactories(), crossoverProbability),
@@ -44,4 +41,8 @@ class FactoriesQapGeneticAlgorithm(
     override fun worstFitness(populationFitnessList: List<Double>): Double = populationFitnessList.max()!!
 
     override fun averageFitness(populationFitnessList: List<Double>): Double = populationFitnessList.average()
+
+    override fun findBestSolution(fullPopulationStatsList: List<PopulationStats<Int>>): ChromosomeWithFitness<Int> {
+        return fullPopulationStatsList.minBy { it.bestFitness }!!.bestChromosomeWithFitness
+    }
 }
