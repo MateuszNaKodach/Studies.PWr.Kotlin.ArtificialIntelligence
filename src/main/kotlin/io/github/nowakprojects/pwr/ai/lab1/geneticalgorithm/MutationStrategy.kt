@@ -7,7 +7,7 @@ abstract class MutationStrategy<GENE>(private val mutationProbability: Double) {
     fun mutatePopulation(population: Population<GENE>): Population<GENE> =
             Population(
                     population.chromosomes
-                            .map { if (toMutate()) mutate(it) else it }
+                            .map { if (toMutate()) mutate(it) else it.copy() }
             )
 
 

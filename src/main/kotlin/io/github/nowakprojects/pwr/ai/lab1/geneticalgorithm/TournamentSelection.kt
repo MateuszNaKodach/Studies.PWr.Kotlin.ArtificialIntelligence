@@ -8,10 +8,9 @@ class TournamentSelection<GENE>(
         elitism: Boolean = true)
     : SelectionStrategy<GENE>(selectionGoal, elitism) {
 
-    override fun selectChromosomeForNewPopulation(chromosomeWithFitnessList: List<ChromosomeWithFitness<GENE>>): Chromosome<GENE>
-        = findBestChromosomeOf(
-            chromosomeWithFitnessList
+    override fun selectChromosomeForNewPopulation(chromosomeWithNormalizedFitnessList: List<ChromosomeWithFitness<GENE>>): Chromosome<GENE> = findBestChromosomeOf(
+            chromosomeWithNormalizedFitnessList
                     .takeRandom(tournamentParticipantsAmount)
-        )
+    )
 
 }

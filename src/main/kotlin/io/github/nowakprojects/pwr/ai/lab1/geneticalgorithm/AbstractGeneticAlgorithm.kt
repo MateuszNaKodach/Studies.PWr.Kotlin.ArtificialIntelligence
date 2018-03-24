@@ -1,12 +1,10 @@
 package io.github.nowakprojects.pwr.ai.lab1.geneticalgorithm
 
-import io.github.nowakprojects.pwr.ai.lab1.domain.GeneticAlgorithmBestSolution
+import io.github.nowakprojects.pwr.ai.lab1.domain.GeneticAlgorithmSolution
 
 abstract class AbstractGeneticAlgorithm<GENE>(
-        val epochLimit: Int,
-        val populationSize: Int,
-        val crossoverProbability: Double,
-        val mutationProbability: Double,
+        val useFitnessCacheMap: Boolean = false,
+        val geneticAlgorithmSettings: GeneticAlgorithmSettings,
         val populationCreator: PopulationCreator<GENE>,
         val selectionStrategy: SelectionStrategy<GENE>,
         val crossoverStrategy: CrossoverStrategy<GENE>,
@@ -14,53 +12,74 @@ abstract class AbstractGeneticAlgorithm<GENE>(
         val knownBestFitness: Double? = null
 ) {
 
-    val fitnessCache = HashMap<Chromosome<GENE>, Double>()
+    private val fitnessCache = HashMap<Chromosome<GENE>, Double>()
 
-    fun execute(): GeneticAlgorithmBestSolution<GENE, Double> {
+    fun execute(): GeneticAlgorithmSolution<GENE, Double> {
+        val (epochLimit, populationSize, crossoverProbability, mutationProbability) = geneticAlgorithmSettings
         val algorithmStart = System.currentTimeMillis()
-        val bestChromosomes = mutableListOf<ChromosomeWithFitness<GENE>>()
-        var population = populationCreator.createRandomPopulation()
+        val fullPopulationStatsList = mutableListOf<PopulationStats<GENE>>()
+        var currentPopulation = populationCreator.createRandomPopulation()
         var pastEpochs = 0
         for (epoch in (1..epochLimit)) {
-            if (bestChromosomes.map { it.fitness }.contains(knownBestFitness)) {
-                pastEpochs = epoch - 1
-                break
-            }
-            val populationFitnessList = computeFitnessForPopulation(population)
-            val normalizedFitnessList = normaliseFitnessForSelection(populationFitnessList)
-            val chromosomeWithNormalizedFitnessForSelectionList =
-                    (0 until population.size).map { ChromosomeWithFitness<GENE>(population.chromosomes[it], normalizedFitnessList[it]) }
-            val selectedPopulation = selectionStrategy.selectNewPopulation(chromosomeWithNormalizedFitnessForSelectionList)
+            val populationFitnessList = computeFitnessForPopulation(currentPopulation)
+            val selectedPopulation = selectionStrategy.selectNewPopulation(currentPopulation, populationFitnessList)
             val crossedPopulation = crossoverStrategy.crossoverPopulation(selectedPopulation)
             val mutatedPopulation = mutationStrategy.mutatePopulation(crossedPopulation)
 
-            val bestFitness = bestFitness(populationFitnessList)
-            val bestChromosomeIndex = populationFitnessList.indexOf(bestFitness)
-            val bestChromosome = population.get(bestChromosomeIndex)
-            println("Epoch: $epoch, Population fitness average: ${populationFitnessList.average()}, Best fitness: $bestFitness, Best chromosome: $bestChromosome")
-            bestChromosomes.add(ChromosomeWithFitness(bestChromosome, bestFitness))
-            population = mutatedPopulation
+            val populationStats = createPopulationStats(currentPopulation, populationFitnessList)
+
+            println("Epoch: $epoch\n$populationStats")
+            fullPopulationStatsList.add(populationStats)
+
+            pastEpochs = epoch
+            if (isSolutionKnown() && populationStats.bestFitness == knownBestFitness) {
+                break
+            }
+            currentPopulation = mutatedPopulation
         }
-        val bestSolution = bestChromosomes.minBy { it.fitness }!!
-        val algorithmEnd = System.currentTimeMillis()
-        return GeneticAlgorithmBestSolution(bestSolution.chromosome, bestSolution.fitness, pastEpochs, algorithmEnd - algorithmStart, bestChromosomes)
+        val executionTimeMillis = System.currentTimeMillis() - algorithmStart
+        return GeneticAlgorithmSolution(
+                findBestSolution(fullPopulationStatsList),
+                fullPopulationStatsList,
+                pastEpochs,
+                executionTimeMillis,
+                selectionStrategy.javaClass.simpleName,
+                geneticAlgorithmSettings
+        )
     }
+
+    private fun createPopulationStats(currentPopulation: Population<GENE>, populationFitnessList: List<Double>): PopulationStats<GENE> {
+        val bestFitness = bestFitness(populationFitnessList)
+        val bestChromosomeIndex = populationFitnessList.indexOf(bestFitness)
+        val bestChromosome = currentPopulation.get(bestChromosomeIndex)
+        val averageFitness = averageFitness(populationFitnessList)
+        val worstFitness = worstFitness(populationFitnessList)
+        val worstChromosomeIndex = populationFitnessList.indexOf(worstFitness)
+        val worstChromosome = currentPopulation.get(worstChromosomeIndex)
+        return PopulationStats(ChromosomeWithFitness(bestChromosome, bestFitness), averageFitness, ChromosomeWithFitness(worstChromosome, worstFitness))
+    }
+
+    abstract fun findBestSolution(fullPopulationStatsList: List<PopulationStats<GENE>>): ChromosomeWithFitness<GENE>
 
     private fun computeFitnessForPopulation(population: Population<GENE>) =
-            population.chromosomes.map { getFitnessForChromosome(it) }
+            population.chromosomes.map { if (useFitnessCacheMap) getFitnessForChromosome(it) else computeFitness(it) }
 
-    private fun normaliseFitnessForSelection(fitnessList: List<Double>): List<Double> {
-        val fitnessListSum = fitnessList.sum()
-        return fitnessList
-                .map { it / fitnessListSum }
-    }
 
     private fun getFitnessForChromosome(chromosome: Chromosome<GENE>): Double =
-        fitnessCache.getOrPut(chromosome, { computeFitness(chromosome) })
+            fitnessCache.getOrPut(chromosome, { computeFitness(chromosome) })
 
+    private fun isSolutionKnown() = knownBestFitness != null
 
-    //TODO: Dzielenie cos z maksymalizacja/ minimalizacja
+    protected fun isContainsBestSolutionChromosome() {
+
+    }
+
     abstract fun computeFitness(chromosome: Chromosome<GENE>): Double
 
     abstract fun bestFitness(populationFitnessList: List<Double>): Double
+
+    abstract fun worstFitness(populationFitnessList: List<Double>): Double
+
+    abstract fun averageFitness(populationFitnessList: List<Double>): Double
+
 }

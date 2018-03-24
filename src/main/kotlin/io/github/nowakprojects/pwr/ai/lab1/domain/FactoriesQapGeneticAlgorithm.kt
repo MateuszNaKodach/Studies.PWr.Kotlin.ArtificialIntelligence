@@ -9,12 +9,10 @@ class FactoriesQapGeneticAlgorithm(
         crossoverProbability: Double,
         mutationProbability: Double,
         selectionStrategy: SelectionStrategy<Int>,
-        knownBestFitness:Double?
+        knownBestFitness: Double?
 ) : AbstractGeneticAlgorithm<Int>(
-        epochLimit,
-        populationSize,
-        crossoverProbability,
-        mutationProbability,
+        false,
+        GeneticAlgorithmSettings(epochLimit, populationSize, crossoverProbability, mutationProbability),
         PopulationCreator(factoriesQapProblemSpecification.getPossibleFactories(), populationSize),
         selectionStrategy,
         FactoriesQapCrossover(factoriesQapProblemSpecification.getPossibleFactories(), crossoverProbability),
@@ -31,8 +29,8 @@ class FactoriesQapGeneticAlgorithm(
         (0 until factoriesAmount).forEach { firstFactory ->
             (0 until factoriesAmount).forEach { secondFactory ->
                 val requiredFlow = flowMatrix.get(firstFactory, secondFactory)
-                val factoriesDistance = distanceMatrix.get(chromosomeGenes[firstFactory]-1, chromosomeGenes[secondFactory]-1)
-                chromosomeFitness+= (requiredFlow * factoriesDistance)
+                val factoriesDistance = distanceMatrix.get(chromosomeGenes[firstFactory] - 1, chromosomeGenes[secondFactory] - 1)
+                chromosomeFitness += (requiredFlow * factoriesDistance)
             }
         }
         return chromosomeFitness
@@ -40,4 +38,11 @@ class FactoriesQapGeneticAlgorithm(
 
     override fun bestFitness(populationFitnessList: List<Double>) = populationFitnessList.min()!!
 
+    override fun worstFitness(populationFitnessList: List<Double>): Double = populationFitnessList.max()!!
+
+    override fun averageFitness(populationFitnessList: List<Double>): Double = populationFitnessList.average()
+
+    override fun findBestSolution(fullPopulationStatsList: List<PopulationStats<Int>>): ChromosomeWithFitness<Int> {
+        return fullPopulationStatsList.minBy { it.bestFitness }!!.bestChromosomeWithFitness
+    }
 }
