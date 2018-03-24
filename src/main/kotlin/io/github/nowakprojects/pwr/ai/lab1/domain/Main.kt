@@ -1,5 +1,6 @@
 package io.github.nowakprojects.pwr.ai.lab1.domain
 
+import io.github.nowakprojects.pwr.ai.lab1.geneticalgorithm.GeneticAlgorithmSolutionCsvFileWriter
 import io.github.nowakprojects.pwr.ai.lab1.geneticalgorithm.SelectionStrategy
 import io.github.nowakprojects.pwr.ai.lab1.geneticalgorithm.TournamentSelection
 import io.github.nowakprojects.pwr.ai.lab1.infrastructure.ProblemSpecificationProvider
@@ -26,10 +27,13 @@ fun main(args: Array<String>) {
             MUTATION_PROBABILITY,
             TournamentSelection<Int>(elitism = true, selectionGoal = SelectionStrategy.SelectionGoal.MINIMIZE_FITNESS),
             knownBestFitness)
-    val (bestSolution, fullPopulationStatsList, passedEpochs, executionTimeMillis, selectionStrategyName, settings)
-            = factoriesQapGeneticAlgorithm.execute()
+
+    val algorithmResult = factoriesQapGeneticAlgorithm.execute()
+    val (bestSolution, fullPopulationStatsList, passedEpochs, executionTimeMillis, selectionStrategyName, settings) = algorithmResult
     println("ALGORITHM HAS FINISH! Execution takes: $executionTimeMillis ms")
     println("After $passedEpochs epochs (limit was: ${settings.epochLimit}), with population size: ${settings.populationSize}")
     println("And probabilities - CROSSOVER: ${settings.crossoverProbability} - MUTATION: ${settings.mutationProbability}")
     println("Best solution is : fitness = ${bestSolution.fitness} for chromosome = ${bestSolution.chromosome}")
+
+    GeneticAlgorithmSolutionCsvFileWriter<Int,Double>().writeToCsv(algorithmResult)
 }
