@@ -23,8 +23,8 @@ class GeneticAlgorithmSolutionCsvFileWriter<GENE, in FITNESS> {
         return "${LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd_HH-mm-ss"))}-QAP-PS$populationSize-EP$epochLimit-CP$crossoverProbability-MP$mutationProbability-$selectionStrategyName.csv"
     }
 
-    private fun generateFileHeaderFor(populationStats: PopulationStats<GENE>): String = "epoch,bestFitness,averageFitness,worstFitness"
+    private fun generateFileHeaderFor(populationStats: PopulationStats<GENE>): String = "epoch  bestFitness  averageFitness   worstFitness"
 
-    private fun generateCsvRowFor(epochIndex: Int, populationStats: PopulationStats<GENE>): String = "$epochIndex,${populationStats.bestFitness},${populationStats.averageFitness},${populationStats.worstFitness}"
+    private fun generateCsvRowFor(epochIndex: Int, populationStats: PopulationStats<GENE>): String = "$epochIndex   ${"%.2f".format(populationStats.bestFitness)}  ${"%.2f".format(populationStats.averageFitness)}   ${"%.2f".format(populationStats.worstFitness)}"
 
 }
