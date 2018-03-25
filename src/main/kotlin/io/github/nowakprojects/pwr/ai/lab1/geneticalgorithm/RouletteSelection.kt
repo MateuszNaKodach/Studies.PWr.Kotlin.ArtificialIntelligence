@@ -11,10 +11,11 @@ class RouletteSelection<GENE>(
     override fun selectChromosomeForNewPopulation(chromosomeWithNormalizedFitnessList: List<ChromosomeWithFitness<GENE>>): Chromosome<GENE> {
         val randomFitness = Random().nextDouble()
         var cumSum: Double = 0.0
-        return chromosomeWithNormalizedFitnessList
-                .takeWhile { cumSum < randomFitness }
-                .onEach { cumSum += it.fitness }
-                .last()
-                .chromosome
+        var i = 0
+        while(cumSum < randomFitness && i <chromosomeWithNormalizedFitnessList.size-1){
+            cumSum += chromosomeWithNormalizedFitnessList[i].fitness
+            i++
+        }
+        return chromosomeWithNormalizedFitnessList[i].chromosome
     }
 }
