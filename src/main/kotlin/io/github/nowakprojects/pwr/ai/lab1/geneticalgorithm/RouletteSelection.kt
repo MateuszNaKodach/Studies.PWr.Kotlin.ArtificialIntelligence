@@ -7,7 +7,7 @@ class RouletteSelection<GENE>(
         selectionGoal: SelectionGoal = SelectionGoal.MAXIMIZE_FITNESS,
         elitism: Boolean = true)
     : SelectionStrategy<GENE>(selectionGoal, elitism) {
-
+//TODO: Odjąć minimum od ruletki w normalizacji!
     override fun selectChromosomeForNewPopulation(chromosomeWithNormalizedFitnessList: List<ChromosomeWithFitness<GENE>>): Chromosome<GENE> {
         val randomFitness = Random().nextDouble()
         var cumSum: Double = 0.0
