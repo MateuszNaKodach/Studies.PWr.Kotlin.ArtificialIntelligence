@@ -14,7 +14,7 @@ const val MUTATION_PROBABILITY = 0.008
 const val EPOCH_LIMIT = 100
 
 fun main(args: Array<String>) {
-    val resourcePath = "/lab1/had20.dat"
+    val resourcePath = "/lab1/had12.dat"
    // val knownBestFitness = 1652.0
     val problemSpecificationProvider: ProblemSpecificationProvider = ResourcesFileProblemSpecificationProvider(resourcePath)
     val problemSpecification = problemSpecificationProvider.provide()
@@ -24,8 +24,8 @@ fun main(args: Array<String>) {
             POPULATION_SIZE,
             CROSSOVER_PROBABILITY,
             MUTATION_PROBABILITY,
-            TournamentSelection<Int>(tournamentParticipantsAmount = 5, elitism = true, selectionGoal = SelectionStrategy.SelectionGoal.MINIMIZE_FITNESS),
-            //RouletteSelection<Int>(elitism = true, selectionGoal = SelectionStrategy.SelectionGoal.MINIMIZE_FITNESS),
+            //TournamentSelection<Int>(tournamentParticipantsAmount = 5, elitism = true, selectionGoal = SelectionStrategy.SelectionGoal.MINIMIZE_FITNESS),
+            RouletteSelection<Int>(elitism = true, selectionGoal = SelectionStrategy.SelectionGoal.MINIMIZE_FITNESS),
             null
     )
 
