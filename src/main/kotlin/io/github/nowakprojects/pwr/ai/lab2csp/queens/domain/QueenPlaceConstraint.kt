@@ -4,6 +4,6 @@ class QueenPlaceConstraint {
 
 
     fun checkIfPlaceSatisfyFreeRowCondition(xRow: Int, chessboard: Chessboard):Boolean{
-
+        return true;
     }
 }
