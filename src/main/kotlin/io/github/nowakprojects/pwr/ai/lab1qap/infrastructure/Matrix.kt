@@ -1,4 +1,4 @@
-package io.github.nowakprojects.pwr.ai.lab1.infrastructure
+package io.github.nowakprojects.pwr.ai.lab1qap.infrastructure
 
 import java.lang.StringBuilder
 

@@ -1,4 +1,4 @@
-package io.github.nowakprojects.pwr.ai.lab1.extensions
+package io.github.nowakprojects.pwr.ai.lab1qap.extensions
 
 import java.util.*
 

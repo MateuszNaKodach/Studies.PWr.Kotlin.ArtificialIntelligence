@@ -1,4 +1,4 @@
-package io.github.nowakprojects.pwr.ai.lab1.geneticalgorithm
+package io.github.nowakprojects.pwr.ai.lab1qap.geneticalgorithm
 
 abstract class SelectionStrategy<GENE>(
         private val selectionGoal: SelectionGoal = SelectionGoal.MINIMIZE_FITNESS,

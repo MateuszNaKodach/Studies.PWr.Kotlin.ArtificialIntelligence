@@ -1,10 +1,10 @@
-package io.github.nowakprojects.pwr.ai.lab1.domain
+package io.github.nowakprojects.pwr.ai.lab1qap.domain
 
-import io.github.nowakprojects.pwr.ai.lab1.extensions.nextInt
-import io.github.nowakprojects.pwr.ai.lab1.extensions.random
-import io.github.nowakprojects.pwr.ai.lab1.geneticalgorithm.Chromosome
-import io.github.nowakprojects.pwr.ai.lab1.geneticalgorithm.CrossoverStrategy
-import io.github.nowakprojects.pwr.ai.lab1.geneticalgorithm.Population
+import io.github.nowakprojects.pwr.ai.lab1qap.extensions.nextInt
+import io.github.nowakprojects.pwr.ai.lab1qap.extensions.random
+import io.github.nowakprojects.pwr.ai.lab1qap.geneticalgorithm.Chromosome
+import io.github.nowakprojects.pwr.ai.lab1qap.geneticalgorithm.CrossoverStrategy
+import io.github.nowakprojects.pwr.ai.lab1qap.geneticalgorithm.Population
 import java.util.*
 
 class FactoriesQapCrossover(

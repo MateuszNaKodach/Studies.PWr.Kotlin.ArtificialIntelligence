@@ -1,4 +1,4 @@
-package io.github.nowakprojects.pwr.ai.lab1.geneticalgorithm
+package io.github.nowakprojects.pwr.ai.lab1qap.geneticalgorithm
 
 
 data class PopulationStats<GENE>(

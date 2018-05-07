@@ -1,6 +1,6 @@
-package io.github.nowakprojects.pwr.ai.lab1.geneticalgorithm
+package io.github.nowakprojects.pwr.ai.lab1qap.geneticalgorithm
 
-import io.github.nowakprojects.pwr.ai.lab1.domain.GeneticAlgorithmSolution
+import io.github.nowakprojects.pwr.ai.lab1qap.domain.GeneticAlgorithmSolution
 import java.io.File
 import java.io.PrintWriter
 import java.time.LocalDateTime

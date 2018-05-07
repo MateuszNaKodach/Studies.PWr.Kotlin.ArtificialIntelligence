@@ -1,6 +1,6 @@
-package io.github.nowakprojects.pwr.ai.lab1.geneticalgorithm
+package io.github.nowakprojects.pwr.ai.lab1qap.geneticalgorithm
 
-import io.github.nowakprojects.pwr.ai.lab1.extensions.takeRandom
+import io.github.nowakprojects.pwr.ai.lab1qap.extensions.takeRandom
 import java.util.*
 
 class RouletteSelection<GENE>(

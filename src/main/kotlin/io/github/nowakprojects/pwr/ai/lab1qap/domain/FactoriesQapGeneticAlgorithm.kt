@@ -1,6 +1,6 @@
-package io.github.nowakprojects.pwr.ai.lab1.domain
+package io.github.nowakprojects.pwr.ai.lab1qap.domain
 
-import io.github.nowakprojects.pwr.ai.lab1.geneticalgorithm.*
+import io.github.nowakprojects.pwr.ai.lab1qap.geneticalgorithm.*
 
 class FactoriesQapGeneticAlgorithm(
         private val factoriesQapProblemSpecification: FactoriesQapProblemSpecification,

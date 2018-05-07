@@ -1,8 +1,8 @@
-package io.github.nowakprojects.pwr.ai.lab1
+package io.github.nowakprojects.pwr.ai.lab1qap
 
-import io.github.nowakprojects.pwr.ai.lab1.infrastructure.ProblemSpecificationNotFound
-import io.github.nowakprojects.pwr.ai.lab1.infrastructure.ProblemSpecificationProvider
-import io.github.nowakprojects.pwr.ai.lab1.infrastructure.ResourcesFileProblemSpecificationProvider
+import io.github.nowakprojects.pwr.ai.lab1qap.infrastructure.ProblemSpecificationNotFound
+import io.github.nowakprojects.pwr.ai.lab1qap.infrastructure.ProblemSpecificationProvider
+import io.github.nowakprojects.pwr.ai.lab1qap.infrastructure.ResourcesFileProblemSpecificationProvider
 import spock.lang.Specification
 
 class FileProblemSpecificationProviderSpec extends Specification {
