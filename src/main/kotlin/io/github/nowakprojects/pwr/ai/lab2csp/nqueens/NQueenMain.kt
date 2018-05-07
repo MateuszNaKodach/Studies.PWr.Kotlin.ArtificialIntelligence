@@ -12,9 +12,17 @@ fun main(args: Array<String>) {
     currentState.addQueenPlace(QueenPlace(1,2)).prettyPrint()
     currentState.prettyPrint()
 */
-    val resolver = NQueensResolver(NQueensProblemGenerator(N).generate())
+    /*
+    val resolver = NQueensForwardchecking(NQueensProblemGenerator(N).generate())
     val solution = resolver.findSolutionFromRow(0)
     solution.chessboard.prettyPrint()
+
+*/
+
+    val resolver = NQueensBackTracking(NQueensProblemGenerator(N).generate())
+    val solution = resolver.solve()
+    resolver.solutions.forEach { it.chessboard.prettyPrint() }
+
 }
 
 fun findSolutionStartingIn(x: Row, y: Column) {
