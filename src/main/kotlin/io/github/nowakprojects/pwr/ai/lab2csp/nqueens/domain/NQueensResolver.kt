@@ -5,25 +5,26 @@ class NQueensResolver(private val specification: NQueensProblemSpecification) //
 
     private val constraints = specification.constraints
     private val selectors = specification.variables.map { it.id to QueenPlaceSelector(it) }
+    private val freeColumnsByRows: MutableMap<Row, List<QueenPlace>> = mutableMapOf()
 
-    fun findSolutionFromRow(y: Row, x: Column) = findSolutionStartingInPoint(y, x, specification.initialState)
+    fun findSolutionFromRow(y: Row) = findSolutionStartingInPoint(y, specification.initialState)
 
-
-    fun findSolutionStartingInPoint(y: Row, x: Column, state: Chessboard): Chessboard {
-        state.prettyPrint()
-        if (state.allQueensPlaced()) {
-            return state
+    fun findSolutionStartingInPoint(y: Row, state: Chessboard): QueensChessboard {
+        if (y == state.n - 1) {
+            return QueensChessboard(state, state.allQueensPlaced())
         }
-        val availableColumnsForRow = getNoViolatingConstraintsColumnsForRow(state, y)
-        if (availableColumnsForRow.isNotEmpty() && x < state.n) {
-            val selectedQueenPlace = getSelectorForVariableId(y).selectFrom(availableColumnsForRow)
-            return findSolutionStartingInPoint(y + 1, x, state.addQueenPlace(selectedQueenPlace))
-        } else {
-            return findSolutionStartingInPoint(y-1, x, state.removeLastQueenPlace())
+        specification.variables.drop(y).forEach {
+            val placesForRow = getNoViolatingConstraintsQueenPlacesForRow(state, it.id)
+            if (placesForRow.isEmpty()) {
+                return@findSolutionStartingInPoint QueensChessboard(state, false)
+            }
+            freeColumnsByRows[it.id] = placesForRow
         }
+        val selectedQueenPlace = getSelectorForVariableId(y).selectFrom(freeColumnsByRows[y].orEmpty())
+        return findSolutionStartingInPoint(y + 1, state.addQueenPlace(selectedQueenPlace))
     }
 
-    private fun getNoViolatingConstraintsColumnsForRow(state: Chessboard, y: Row) =
+    private fun getNoViolatingConstraintsQueenPlacesForRow(state: Chessboard, y: Row) =
             specification.getColumnsForRow(y)
                     .map { x -> QueenPlace(x, y) }
                     .filter { place -> constraints.all { it.isSatisfiedFor(state, place) } }

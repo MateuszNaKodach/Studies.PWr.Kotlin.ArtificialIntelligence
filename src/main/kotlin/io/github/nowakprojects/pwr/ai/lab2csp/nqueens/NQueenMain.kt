@@ -13,8 +13,8 @@ fun main(args: Array<String>) {
     currentState.prettyPrint()
 */
     val resolver = NQueensResolver(NQueensProblemGenerator(N).generate())
-    val solution = resolver.findSolutionFromRow(0, 1)
-    solution.prettyPrint()
+    val solution = resolver.findSolutionFromRow(0)
+    solution.chessboard.prettyPrint()
 }
 
 fun findSolutionStartingIn(x: Row, y: Column) {
