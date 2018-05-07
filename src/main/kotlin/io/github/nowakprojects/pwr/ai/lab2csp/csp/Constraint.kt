@@ -1,7 +1,7 @@
 package io.github.nowakprojects.pwr.ai.lab2csp.csp
 
-interface Constraint<in T> {
+interface Constraint<V: Value<*,*>> {
 
-    fun isSatisfiedFor(t: T):Boolean
+    fun isSatisfiedFor(value: V): Boolean
 
 }
