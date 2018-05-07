@@ -10,11 +10,11 @@ typealias Row = Int
 
 class NQueensProblemGenerator(val n: Int) {
 
-    fun generate(): NQueensProblemSpecification =
+    fun generate() =
             CSPSpecification
                     .withVariables<Row,QueenInRow,QueenPlace,Chessboard>(generateVariables())
                     .andConstraints(NoOtherQueensInRow(), NoOtherQueensOnDiagonals())
-                    .buildWithInitialState(Chessboard(n, emptyList())) as NQueensProblemSpecification
+                    .buildWithInitialState(Chessboard(n, emptyList()))
 
 
     private fun generateVariables() =
