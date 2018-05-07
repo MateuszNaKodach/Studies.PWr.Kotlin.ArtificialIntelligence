@@ -10,7 +10,7 @@ class FileProblemSpecificationProviderSpec extends Specification {
 
     def "Opening existing file #fileName with data for laboratory exercise"() {
         given: "File path with #fileName"
-        def filePath = "/lab1/" + fileName
+        def filePath = "/lab1qap/" + fileName
         ProblemSpecificationProvider specificationProvider = new ResourcesFileProblemSpecificationProvider(filePath)
 
         when: "Load data from file"
@@ -30,7 +30,7 @@ class FileProblemSpecificationProviderSpec extends Specification {
 
     def "Opening not existing file #fileName for loading exercise data"() {
         given: "File path with #fileName"
-        def filePath = "/lab1/" + fileName
+        def filePath = "/lab1qap/" + fileName
         ProblemSpecificationProvider specificationProvider = new ResourcesFileProblemSpecificationProvider(filePath)
 
         when: "Load data from file"
