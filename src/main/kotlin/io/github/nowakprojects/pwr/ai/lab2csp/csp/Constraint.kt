@@ -1,7 +1,7 @@
 package io.github.nowakprojects.pwr.ai.lab2csp.csp
 
-interface Constraint<S:State<*,*>, V: Value<*,*>> {
+interface Constraint<ID, V, VALUE : Value<ID, V>, S : State<ID, V, VALUE>> {
 
-    fun isSatisfiedFor(state:S, value: V): Boolean
+    fun isSatisfiedFor(state: S, value: VALUE): Boolean
 
 }

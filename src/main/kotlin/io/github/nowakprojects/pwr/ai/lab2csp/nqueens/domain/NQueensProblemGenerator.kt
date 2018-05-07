@@ -1,8 +1,6 @@
 package io.github.nowakprojects.pwr.ai.lab2csp.nqueens.domain
 
-import io.github.nowakprojects.pwr.ai.lab2csp.csp.CSPSpecification
-import io.github.nowakprojects.pwr.ai.lab2csp.csp.Constraint
-import io.github.nowakprojects.pwr.ai.lab2csp.csp.Variable
+import io.github.nowakprojects.pwr.ai.lab2csp.csp.*
 
 
 typealias Column = Int
@@ -10,10 +8,10 @@ typealias Row = Int
 
 class NQueensProblemGenerator(val n: Int) {
 
-    fun generate() =
-            CSPSpecification
-                    .withVariables<Row,QueenInRow,QueenPlace,Chessboard>(generateVariables())
-                    .andConstraints(NoOtherQueensInRow(), NoOtherQueensOnDiagonals())
+    fun generate(): NQueensProblemSpecification =
+            NQueensProblemSpecification
+                    .withVariables(generateVariables())
+                    .andConstraints(NoOtherQueensInRow(), NoOtherQueensInColumn(), NoOtherQueensOnDiagonals())
                     .buildWithInitialState(Chessboard(n, emptyList()))
 
 
@@ -23,7 +21,19 @@ class NQueensProblemGenerator(val n: Int) {
             }.toList()
 }
 
-class NQueensProblemSpecification(variables: List<QueenInRow>, constraints: Set<Constraint<Chessboard, QueenPlace>>, initialState: Chessboard)
-    : CSPSpecification<Row, QueenInRow, QueenPlace, Chessboard>(variables, constraints, initialState) {
+class NQueensProblemSpecification(variables: List<QueenInRow>, constraints: Set<Constraint<Row, Column, QueenPlace, Chessboard>>, initialState: Chessboard)
+    : CSPSpecification<Row, Column, QueenInRow, QueenPlace, Chessboard>(variables, constraints, initialState) {
+
+    fun getColumnsForRow(row: Row) = getVariableDomain(row)
+
+    companion object {
+        fun withVariables(queenInRows: List<QueenInRow>) = NQueensProblemSpecificationBuilder(queenInRows)
+    }
+}
+
+class NQueensProblemSpecificationBuilder(queenInRows: List<QueenInRow>)
+    : CSPSpecificationBuilder<Row, Column, QueenInRow, QueenPlace, Chessboard, NQueensProblemSpecification>(queenInRows) {
+
+    override fun create(variables: List<QueenInRow>, constraints: Set<Constraint<Row, Column, QueenPlace, Chessboard>>, initialState: Chessboard) = NQueensProblemSpecification(variables, constraints, initialState)
 }
 

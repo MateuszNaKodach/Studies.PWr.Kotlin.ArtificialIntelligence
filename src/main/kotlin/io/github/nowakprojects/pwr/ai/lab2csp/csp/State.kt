@@ -1,6 +1,6 @@
 package io.github.nowakprojects.pwr.ai.lab2csp.csp
 
-open class State<ID, V:Value<ID,*>>(val values: List<V>) {
+open class State<ID, V, VALUE : Value<ID, V>>(val values: List<VALUE>) {
 
-    fun getValueFor(variableId: ID): V? = values.firstOrNull { it.variableId == variableId }
+    fun getValueFor(variableId: ID): VALUE? = values.firstOrNull { it.variableId == variableId }
 }
