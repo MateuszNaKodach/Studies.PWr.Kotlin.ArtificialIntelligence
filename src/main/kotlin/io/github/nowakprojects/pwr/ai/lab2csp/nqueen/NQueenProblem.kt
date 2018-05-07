@@ -13,9 +13,12 @@ class NQueenProblem(val n: Int) {
     val solutions = mutableSetOf<Chessboard>()
 
 
-    fun solveWithBackTracking() = solveNQueenProblem(0)
+    fun solveWithBackTracking() {
+        solutions.clear()
+        solveNQueenProblemWithBacktracking(0)
+    }
 
-    private fun solveNQueenProblem(column: Column) {
+    private fun solveNQueenProblemWithBacktracking(column: Column) {
         if (allQueensPlaced(column, n)) {
             val solutionSnapshot = chessboard.map { it.copyOf() }.toTypedArray()
             solutions.add(solutionSnapshot)
@@ -23,8 +26,31 @@ class NQueenProblem(val n: Int) {
         (0 until chessboard.size).forEach { row ->
             if (isSafePosition(chessboard, row, column)) {
                 chessboard[row][column] = 1
-                solveNQueenProblem(column + 1)
+                solveNQueenProblemWithBacktracking(column + 1)
                 chessboard[row][column] = 0
+            }
+        }
+    }
+
+    val selectedRows = mutableSetOf<Row>()
+
+    fun solveWithForwardChecking() {
+        solutions.clear()
+        solveNQueenProblemWithForwardChecking(0)
+    }
+
+    private fun solveNQueenProblemWithForwardChecking(column: Column) {
+        if (allQueensPlaced(column, n)) {
+            val solutionSnapshot = chessboard.map { it.copyOf() }.toTypedArray()
+            solutions.add(solutionSnapshot)
+        }
+        (0 until chessboard.size).forEach { row ->
+            if (!selectedRows.contains(row) && !isQueenOnDiagonals(chessboard, row, column)) {
+                chessboard[row][column] = 1
+                selectedRows.add(row)
+                solveNQueenProblemWithBacktracking(column + 1)
+                chessboard[row][column] = 0
+                selectedRows.remove(row)
             }
         }
     }
