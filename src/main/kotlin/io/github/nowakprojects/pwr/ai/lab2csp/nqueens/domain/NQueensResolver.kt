@@ -6,27 +6,29 @@ class NQueensResolver(private val specification: NQueensProblemSpecification) //
     private val constraints = specification.constraints
     private val selectors = specification.variables.map { it.id to QueenPlaceSelector(it) }
 
-    fun findSolutionFromRow(x: Row) = findSolutionStartingInRow(x, specification.initialState)
+    fun findSolutionFromRow(y: Row, x: Column) = findSolutionStartingInPoint(y, x, specification.initialState)
 
 
-    fun findSolutionStartingInRow(x: Row, state: Chessboard): Chessboard {
+    fun findSolutionStartingInPoint(y: Row, x: Column, state: Chessboard): Chessboard {
         state.prettyPrint()
         if (state.allQueensPlaced()) {
             return state
         }
-        val availableColumnsForRow = getNoViolatingConstraintsColumnsForRow(state, x)
+        val availableColumnsForRow = getNoViolatingConstraintsColumnsForRow(state, y)
         if (availableColumnsForRow.isNotEmpty() && x < state.n) {
-            val selectedQueenPlace = getSelectorForVariableId(x).selectFrom(availableColumnsForRow)
-            return findSolutionStartingInRow(x + 1, state.addQueenPlace(selectedQueenPlace))
+            val selectedQueenPlace = getSelectorForVariableId(y).selectFrom(availableColumnsForRow)
+            return findSolutionStartingInPoint(y + 1, x, state.addQueenPlace(selectedQueenPlace))
         } else {
-            return findSolutionStartingInRow(x - 1, state.removeLastQueenPlace())
+            return findSolutionStartingInPoint(y-1, x, state.removeLastQueenPlace())
         }
     }
 
-    private fun getNoViolatingConstraintsColumnsForRow(state: Chessboard, x: Row) =
-            specification.getColumnsForRow(x)
-                    .map { y -> QueenPlace(x, y) }
+    private fun getNoViolatingConstraintsColumnsForRow(state: Chessboard, y: Row) =
+            specification.getColumnsForRow(y)
+                    .map { x -> QueenPlace(x, y) }
                     .filter { place -> constraints.all { it.isSatisfiedFor(state, place) } }
 
-    private fun getSelectorForVariableId(x: Row) = selectors[x].second
+    private fun getSelectorForVariableId(y: Row) = selectors[y].second
+
+    private fun clearHistory() = selectors.forEach { it.second.clearHistory() }
 }

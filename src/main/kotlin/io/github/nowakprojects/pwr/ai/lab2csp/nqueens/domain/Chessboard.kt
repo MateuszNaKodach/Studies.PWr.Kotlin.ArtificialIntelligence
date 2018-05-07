@@ -26,11 +26,11 @@ class Chessboard(val n: Int, queenPlaces: List<QueenPlace>) : State<Row, Column,
         }
         val mutableList = values.toMutableList()
         mutableList.add(queenPlace)
-        return Chessboard(n, mutableList)
+        return Chessboard(n, mutableList.sortedBy { it.getY() })
     }
 
     fun removeLastQueenPlace(): Chessboard {
-        return Chessboard(n, values.dropLast(1))
+        return Chessboard(n, values.dropLast(1).sortedBy { it.getY() })
     }
 
     fun isQueenOnPlace(x: Column, y: Row): Boolean {
