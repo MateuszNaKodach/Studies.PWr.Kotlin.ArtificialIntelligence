@@ -1,9 +1,8 @@
 package io.github.nowakprojects.pwr.ai.lab2csp.queens.domain
 
-class QueenPlaceConstraint {
+import io.github.nowakprojects.pwr.ai.lab2csp.csp.Constraint
 
+class QueenPlaceConstraint(private val chessboard: Chessboard) : Constraint<Point> {
 
-    fun checkIfPlaceSatisfyFreeRowCondition(xRow: Int, chessboard: Chessboard):Boolean{
-        return true;
-    }
+    override fun isSatisfiedFor(t: Point): Boolean = chessboard.isNoQueenAttackedOnPoint(t.x, t.y)
 }
