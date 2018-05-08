@@ -1,41 +1,64 @@
 package io.github.nowakprojects.pwr.ai.lab2csp.nqueen
 
-
 class NQueenSolver(val n: Int) {
 
-    private val chessboard: Chessboard = ChessboardBuilder.empty(n)
+    /**
+     * INITIAL SETTINGS
+     */
+    private var chessboard: Chessboard = ChessboardBuilder.empty(n)
+    private var rowsPermutation: List<Int> = emptyList()
+    private var columnsPermutation: List<Int> = emptyList()
 
     /*
     STATISTICS -------------------------------------------------------------------------------------------------------
      */
-    val solutions = mutableSetOf<Chessboard>()
+    val solutions = mutableListOf<Chessboard>()
+    var startTime: Long = 0
     var durationNano: Long = 0
+    var firstSolutionFound = false
+    var firstSolutionFoundInNano: Long = 0
+    var findMethodInvocations: Long = 0
 
-    fun solveWith(algorithm: Algorithm): Set<Chessboard> {
+    fun solveWith(
+            algorithm: Algorithm,
+            rowPermutation: PERMUTATION = PERMUTATION.ORDERED,
+            columnPermutation: PERMUTATION = PERMUTATION.ORDERED): Statistics {
         clearStatistics()
-        val startTime = System.nanoTime()
+        setupRowAndColumnPermutations(rowPermutation, columnPermutation)
+        startTime = System.nanoTime()
         val solutions = when (algorithm) {
             Algorithm.BACK_TRACKING -> solveWithBackTracking()
             Algorithm.FORWARD_CHECKING -> solveWithForwardChecking()
         }
         durationNano = System.nanoTime() - startTime
-        return solutions
+        return Statistics(n, solutions, durationNano, firstSolutionFoundInNano, findMethodInvocations)
+    }
+
+    private fun setupRowAndColumnPermutations(rowPermutation: PERMUTATION, columnPermutation: PERMUTATION) {
+        rowsPermutation = when (rowPermutation) {
+            PERMUTATION.ORDERED -> (0 until n).toList()
+            PERMUTATION.FROM_MIDDLE -> (0 until n).permutationFromMiddle()
+        }
+        columnsPermutation = when (columnPermutation) {
+            PERMUTATION.ORDERED -> (0 until n).toList()
+            PERMUTATION.FROM_MIDDLE -> (0 until n).permutationFromMiddle()
+        }
     }
 
     /**
      * BACKTRACKING ------------------------------------------------------------------------------------------------
      */
-    private fun solveWithBackTracking(): Set<Chessboard> {
+    private fun solveWithBackTracking(): List<Chessboard> {
         solveNQueenProblemWithBacktracking(0)
         return solutions
     }
 
     private fun solveNQueenProblemWithBacktracking(column: Column) {
+        findMethodInvocations++
         if (allQueensPlaced(column)) {
-            val solutionSnapshot = chessboard.map { it.copyOf() }.toTypedArray()
-            solutions.add(solutionSnapshot)
+            storeSolution()
         }
-        (0 until chessboard.size).forEach { row ->
+        rowsPermutation.forEach { row ->
             if (isSafePosition(chessboard, row, column)) {
                 chessboard[row][column] = 1
                 solveNQueenProblemWithBacktracking(column + 1)
@@ -49,32 +72,41 @@ class NQueenSolver(val n: Int) {
     /**
      * FORWARDCHECKING ------------------------------------------------------------------------------------------------
      */
-    fun solveWithForwardChecking(): Set<Chessboard> {
+    private fun solveWithForwardChecking(): List<Chessboard> {
         solutions.clear()
         solveNQueenProblemWithForwardChecking(0)
         return solutions
     }
 
     private fun solveNQueenProblemWithForwardChecking(column: Column) {
+        findMethodInvocations++
         if (allQueensPlaced(column)) {
-            val solutionSnapshot = chessboard.map { it.copyOf() }.toTypedArray()
-            solutions.add(solutionSnapshot)
+            storeSolution()
         }
-        (0 until chessboard.size).forEach { row ->
+        rowsPermutation.forEach { row ->
             if (!selectedRows.contains(row) && !isQueenOnDiagonals(chessboard, row, column)) {
                 chessboard[row][column] = 1
                 selectedRows.add(row)
-                solveNQueenProblemWithBacktracking(column + 1)
+                solveNQueenProblemWithForwardChecking(column + 1)
                 chessboard[row][column] = 0
                 selectedRows.remove(row)
             }
         }
     }
 
-
     /**
      * COMMON -----------------------------------------------------------------------------------------------
      */
+
+    private fun storeSolution() {
+        if (!firstSolutionFound) {
+            firstSolutionFoundInNano = System.nanoTime() - startTime
+            firstSolutionFound = true
+        }
+        val solutionSnapshot = chessboard.map { it.copyOf() }.toTypedArray()
+        solutions.add(solutionSnapshot)
+    }
+
     private fun allQueensPlaced(currentColumn: Column) = currentColumn >= n
 
     private fun isSafePosition(chessboard: Chessboard, row: Row, column: Column) =
@@ -93,17 +125,45 @@ class NQueenSolver(val n: Int) {
     fun prettyPrintChessboard(chessboard: Chessboard) {
         chessboard.prettyPrint()
         println()
+        println()
     }
 
     private fun clearStatistics() {
+        chessboard = ChessboardBuilder.empty(n)
         solutions.clear()
         selectedRows.clear()
         durationNano = 0
+        startTime = 0
+        firstSolutionFoundInNano = 0
+        firstSolutionFound = false
+        findMethodInvocations = 0
     }
 
     enum class Algorithm {
         FORWARD_CHECKING,
         BACK_TRACKING;
     }
+
+    enum class PERMUTATION {
+        ORDERED,
+        FROM_MIDDLE;
+    }
+}
+
+data class Statistics(
+        val nQueens: Int,
+        val solutions: List<Chessboard>,
+        val durationNano: Long,
+        val firstSolutionFoundInNano: Long,
+        val findMethodInvocations: Long) {
+
+    override fun toString(): String {
+        return "Liczba królowych (N) \t| Rozwiązań: \t| Czas wyszukania 1. rozwiązania: \t| Czas wyszukania wszystkich rozwiązań: \t| Liczba wywołań metody rekurencyjnej: \n" +
+                "${nQueens} \t| ${solutions.size} \t| $durationNano \t| ${firstSolutionFoundInNano} \t| ${findMethodInvocations}"
+    }
+
+    fun getFirstSolution() = solutions.first()
+
+    fun printFirstSolution() = getFirstSolution().prettyPrint()
 }
 
