@@ -1,15 +1,7 @@
 package io.github.nowakprojects.pwr.ai.lab2csp.latianSquare
 
-/**
- * Class to find solutions in latian square using backtracking
- * @param square the square where we find solutions
- */
 class BacktrackMethod(private val square: Square) {
 
-    /**
-     * Set with solutions, I didn't wrote deep hashCode() and equal(...) methods, so the same solutions can will repeat
-     * It is good to find bugs
-     */
     private val solutionSet = HashSet<Square>()
 
     /**
