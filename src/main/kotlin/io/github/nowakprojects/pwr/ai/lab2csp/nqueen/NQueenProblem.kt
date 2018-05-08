@@ -3,9 +3,6 @@ package io.github.nowakprojects.pwr.ai.lab2csp.nqueen
 import java.lang.StringBuilder
 import kotlin.math.abs
 
-typealias Chessboard = Array<IntArray>
-typealias Row = Int
-typealias Column = Int
 
 class NQueenProblem(val n: Int) {
 
@@ -84,14 +81,15 @@ class NQueenProblem(val n: Int) {
                         .map { array -> array.toList().map { if (it == 1) "Q" else "_" } }
                         .map { it.toString().replace(",", "") }.forEach { this.append(it).append("\n") }
                         .toString()
-            }
+            }.toString()
 
     fun prettyPrintChessboard() {
-        print(toString(chessboard))
+        prettyPrintChessboard(chessboard)
     }
 
     fun prettyPrintChessboard(chessboard: Chessboard) {
-        print(toString(chessboard))
+        chessboard.prettyPrint()
+        println()
     }
 
 }
