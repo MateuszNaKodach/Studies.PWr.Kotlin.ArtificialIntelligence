@@ -2,9 +2,6 @@ package io.github.nowakprojects.pwr.ai.lab2csp.latianSquare
 
 import java.util.*
 
-/**
- * Created by Marcin
- */
 data class Square constructor(val field: Array<IntArray>) {
 
     /**
