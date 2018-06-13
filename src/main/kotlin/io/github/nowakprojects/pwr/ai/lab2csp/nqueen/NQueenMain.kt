@@ -9,9 +9,9 @@ fun main(args: Array<String>) {
         println(backTrackingSolution.toString())
         //backTrackingSolution.printFirstSolution()
        // println()
-        println("FORWARD CHECKING:")
-        val forwardCheckingSolution = problem.solveWith(NQueenSolver.Algorithm.FORWARD_CHECKING, NQueenSolver.PERMUTATION.FROM_MIDDLE)
-        println(forwardCheckingSolution.toString())
+       // println("FORWARD CHECKING:")
+      //  val forwardCheckingSolution = problem.solveWith(NQueenSolver.Algorithm.FORWARD_CHECKING, NQueenSolver.PERMUTATION.FROM_MIDDLE)
+      //  println(forwardCheckingSolution.toString())
         //forwardCheckingSolution.printFirstSolution()
     }
 

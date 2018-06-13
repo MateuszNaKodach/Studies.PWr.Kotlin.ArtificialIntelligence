@@ -49,19 +49,21 @@ class NQueenSolver(val n: Int) {
      * BACKTRACKING ------------------------------------------------------------------------------------------------
      */
     private fun solveWithBackTracking(): List<Chessboard> {
-        solveNQueenProblemWithBacktracking(0)
+        solveNQueenProblemWithBacktracking(0,0)
         return solutions
     }
 
-    private fun solveNQueenProblemWithBacktracking(column: Column) {
+    private fun solveNQueenProblemWithBacktracking(placedQueens: Int, currentField: Int) {
         findMethodInvocations++
-        if (allQueensPlaced(column)) {
+        if (allQueensPlaced(placedQueens)) {
             storeSolution()
         }
-        rowsPermutation.forEach { row ->
+        (0 until n * n).forEach { field ->
+            val column = field / n
+            val row = field % n
             if (isSafePosition(chessboard, row, column)) {
                 chessboard[row][column] = 1
-                solveNQueenProblemWithBacktracking(column + 1)
+                solveNQueenProblemWithBacktracking(placedQueens + 1, currentField + 1)
                 chessboard[row][column] = 0
             }
         }
